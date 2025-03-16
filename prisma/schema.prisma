@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid())
+  email      String   @unique
+  name       String?
+  customerId String?  @unique
+  priceId    String?
+  status     String   @default("inactive")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  pdfSummaries PdfSummary[]
+  payments     Payment[]
+}
+
+model PdfSummary {
+  id              String   @id @default(uuid())
+  userId          String
+  originalFileUrl String
+  summaryText     String
+  status          String   @default("completed")
+  title           String?
+  fileName        String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relation with User
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id              String @id @default(uuid())
+  amount          Int
+  status          String
+  stripePaymentId String @unique
+  priceId         String
+  userEmail       String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relation with User via email
+  user User @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+}

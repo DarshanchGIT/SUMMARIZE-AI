@@ -9,33 +9,32 @@ import { fileSchema } from "@/types/uploaded-file";
 import { useUploadThing } from "@/utils/uploadthing";
 import { toast } from "sonner";
 import { Spinner } from "../ui/spinner";
-import { generateSummary } from "@/actions/generate-summary";
+import { generateSummary, storePdfSummary } from "@/actions/generate-summary";
 
 export const UploadDiv = () => {
     const [fileName, setFileName] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
+
+    const { startUpload } = useUploadThing("pdfUploader", {
+        onBeforeUploadBegin: (files) => files,
+        onUploadBegin: (name) => console.log("Starting upload:", name),
+        onClientUploadComplete: (res) => console.log("Upload Completed:", res.length, "files uploaded"),
+        onUploadProgress: (p) => console.log("Upload Progress:", p),
+    });
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) setFileName(file.name);
     };
 
-    const { startUpload } = useUploadThing("pdfUploader", {
-        onBeforeUploadBegin: (files) => files,
-        onUploadBegin: (name) => console.log("Beginning upload of", name),
-        onClientUploadComplete: (res) => console.log("Upload Completed.", res.length, "files uploaded"),
-        onUploadProgress: (p) => console.log("onUploadProgress", p),
-    });
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
 
-        // Extract the file from form data
         const formData = new FormData(e.currentTarget);
         const file = formData.get("file") as File;
 
-        // Validate the file against fileSchema
+        // Validate the file
         const { success } = fileSchema.safeParse({ file });
         if (!success) {
             toast.error("Invalid file. Please upload a valid PDF.");
@@ -43,28 +42,50 @@ export const UploadDiv = () => {
             return;
         }
 
-        // Show loading toast before upload starts
-        const loadingToast = toast.loading("Hang tight, processing your PDF...");
+        // Show loading toast
+        const loadingToast = toast.loading("Processing your PDF...");
 
-        // Upload the file
         try {
-            const res = await startUpload([file]);
+            // Upload file
+            const uploadResponse = await startUpload([file]);
             toast.dismiss(loadingToast);
-            if (!res) {
-                toast.error("Something went wrong. Please try again.");
+
+            if (!uploadResponse || uploadResponse.length === 0) {
+                toast.error("Upload failed. Please try again.");
                 return;
             }
-            // toast.success("File uploaded successfully 🎉");
-            setFileName("");
 
-            //parse the pdf and feed it to LLM
-            const serverData = res[0].serverData
+            const serverData = uploadResponse[0].serverData;
+            if (!serverData) {
+                toast.error("Server response is invalid.");
+                return;
+            }
+
             console.log("ServerData:", serverData);
-            const text = await generateSummary(serverData);
-            console.log({ text })
+            // Generate summary
+            const response = await generateSummary(serverData);
+            if (!response.success) {
+                toast.error(response.message || "Failed to generate summary.");
+                return;
+            }
+
+            console.log("Summary:", response.summary);
+
+            //populate pdfSummary into db
+            const { file: { name, url } } = serverData
+            const dbPopulate = await storePdfSummary({
+                title: name,
+                summaryText: response.summary || '',
+                fileName: name,
+                originalFileUrl: url,
+            })
+            console.log("Db response:", dbPopulate)
+            console.log("saving into db")
+            toast.success("Summary generated successfully!");
         } catch (error) {
             toast.dismiss(loadingToast);
-            toast.error("Upload failed. Please try again.");
+            toast.error("An error occurred. Please try again.");
+            console.error("Error:", error);
         } finally {
             setLoading(false);
         }
