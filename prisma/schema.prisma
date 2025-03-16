@@ -17,7 +17,7 @@ model User {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  pdfSummaries PdfSummary[]
+  // pdfSummaries PdfSummary[]
   payments     Payment[]
 }
 
@@ -33,7 +33,7 @@ model PdfSummary {
   updatedAt       DateTime @updatedAt
 
   // Relation with User
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Payment {

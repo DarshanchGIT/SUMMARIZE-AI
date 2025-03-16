@@ -10,17 +10,13 @@ import { useUploadThing } from "@/utils/uploadthing";
 import { toast } from "sonner";
 import { Spinner } from "../ui/spinner";
 import { generateSummary, storePdfSummary } from "@/actions/generate-summary";
+import { formatFileNameToTitle } from "@/utils/format-filName";
 
 export const UploadDiv = () => {
-    const [fileName, setFileName] = useState<string>("");
-    const [loading, setLoading] = useState<boolean>(false);
+    const [fileName, setFileName] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    const { startUpload } = useUploadThing("pdfUploader", {
-        onBeforeUploadBegin: (files) => files,
-        onUploadBegin: (name) => console.log("Starting upload:", name),
-        onClientUploadComplete: (res) => console.log("Upload Completed:", res.length, "files uploaded"),
-        onUploadProgress: (p) => console.log("Upload Progress:", p),
-    });
+    const { startUpload } = useUploadThing("pdfUploader");
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -34,7 +30,6 @@ export const UploadDiv = () => {
         const formData = new FormData(e.currentTarget);
         const file = formData.get("file") as File;
 
-        // Validate the file
         const { success } = fileSchema.safeParse({ file });
         if (!success) {
             toast.error("Invalid file. Please upload a valid PDF.");
@@ -42,15 +37,12 @@ export const UploadDiv = () => {
             return;
         }
 
-        // Show loading toast
-        const loadingToast = toast.loading("Processing your PDF...");
-
+        const pdfUploading = toast.loading("Uploading your PDF...🙃");
         try {
-            // Upload file
             const uploadResponse = await startUpload([file]);
-            toast.dismiss(loadingToast);
+            toast.dismiss(pdfUploading);
 
-            if (!uploadResponse || uploadResponse.length === 0) {
+            if (!uploadResponse?.length) {
                 toast.error("Upload failed. Please try again.");
                 return;
             }
@@ -61,29 +53,27 @@ export const UploadDiv = () => {
                 return;
             }
 
-            console.log("ServerData:", serverData);
-            // Generate summary
+            const summaryGenerateToast = toast.loading("Generating summary...🙂");
             const response = await generateSummary(serverData);
+            toast.dismiss(summaryGenerateToast);
+
             if (!response.success) {
                 toast.error(response.message || "Failed to generate summary.");
                 return;
             }
 
-            console.log("Summary:", response.summary);
-
-            //populate pdfSummary into db
-            const { file: { name, url } } = serverData
-            const dbPopulate = await storePdfSummary({
-                title: name,
+            const { file: { name, url } } = serverData;
+            const title = formatFileNameToTitle(name)
+            await storePdfSummary({
+                title: title,
                 summaryText: response.summary || '',
                 fileName: name,
                 originalFileUrl: url,
-            })
-            console.log("Db response:", dbPopulate)
-            console.log("saving into db")
-            toast.success("Summary generated successfully!");
+            });
+
+            toast.success("Summary generated successfully✨");
         } catch (error) {
-            toast.dismiss(loadingToast);
+            toast.dismiss(pdfUploading);
             toast.error("An error occurred. Please try again.");
             console.error("Error:", error);
         } finally {
