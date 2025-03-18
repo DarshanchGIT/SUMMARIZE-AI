@@ -1,9 +1,13 @@
 "use client";
 
+import { UploadHeader } from "../upload/upload-header";
+import { SummaryDiv } from "./summary-div";
+
 export const SummariesPage = () => {
-    return (
-        <div>
-            YOUR SUMMARY WILL BE DISPLAYED HERE
-        </div>
-    );
-}
+  return (
+    <div>
+      <UploadHeader />
+      <SummaryDiv />
+    </div>
+  );
+};

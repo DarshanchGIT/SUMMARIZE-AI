@@ -1,9 +1,8 @@
-import Link from 'next/link';
-import { buttonVariants } from '../ui/button';
-import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import Link from "next/link";
+import { buttonVariants } from "../ui/button";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export async function Header() {
-
   return (
     <header className="sticky inset-x-0 top-0 z-50 h-14 w-full border-b border-border bg-background/40 px-4 backdrop-blur-lg font-sans">
       <div className="mx-auto flex h-full items-center justify-between md:max-w-screen-xl">
@@ -35,8 +34,8 @@ export async function Header() {
             <Link
               href="/sign-up"
               className={buttonVariants({
-                size: 'sm',
-                className: 'hidden md:flex',
+                size: "sm",
+                className: "hidden md:flex",
               })}
             >
               Get Started
