@@ -2,6 +2,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import BlurText from "../ui/blur-text";
 import { SummaryCard } from "./summary-card";
+import { ArrowRight, ShieldAlert } from "lucide-react";
 
 const summaries = [
   {
@@ -48,12 +49,16 @@ export const SummaryDiv = () => {
       <p className="text-gray-500 mb-6">
         Transform your PDFs into concise, actionable insights
       </p>
-      <Alert className="bg-red-100 text-red-700 border border-red-300 mb-6">
-        <AlertDescription>
-          You've reached the limit of 5 uploads on the Basic plan.{" "}
-          <a href="#" className="text-blue-600 underline">
-            Click here to Upgrade to Pro
-          </a>{" "}
+      <Alert className="bg-red-100 border border-red-300 mb-6">
+        <AlertDescription className="text-red-600 inline-flex items-center">
+          <ShieldAlert size={20} className="mr-2" />
+          You've reached the limit of 5 uploads on the Basic plan.
+          <a href="#" className="text-red-600 underline">
+            Click here to Upgrade Pro
+          </a>
+          <span>
+            <ArrowRight size={16} />
+          </span>
           for unlimited uploads.
         </AlertDescription>
       </Alert>

@@ -5,7 +5,7 @@ import { SummaryDiv } from "./summary-div";
 
 export const SummariesPage = () => {
   return (
-    <div>
+    <div className="scroll-smooth">
       <UploadHeader />
       <SummaryDiv />
     </div>

@@ -4,7 +4,7 @@ import {
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from "@radix-ui/react-dialog";
+} from "../ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { DialogHeader } from "../ui/dialog";
 import { Button } from "../ui/button";
@@ -23,8 +23,8 @@ export const SummaryCard = ({ summary }: { summary: summaryProps }) => {
         <div className="flex justify-between items-center">
           <span className="text-green-600 font-medium">{summary.status}</span>
           <Dialog>
-            <DialogTrigger>
-              <Trash2 className="w-4 h-4 text-gray-500" />
+            <DialogTrigger className="bg-gray-100 p-2 border rounded-md">
+              <Trash2 className="w-4 h-4 text-red-500" />
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>

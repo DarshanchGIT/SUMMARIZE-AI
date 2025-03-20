@@ -137,3 +137,7 @@
 .shine {
   animation: shine 3s linear infinite;
 }
+
+html {
+  scroll-behavior: smooth;
+}
