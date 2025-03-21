@@ -10,6 +10,7 @@ import { DialogHeader } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Trash2, X } from "lucide-react";
 import { summaryProps } from "@/types/summary-type";
+import { Badge } from "../ui/badge";
 
 export const SummaryCard = ({ summary }: { summary: summaryProps }) => {
   return (
@@ -21,9 +22,10 @@ export const SummaryCard = ({ summary }: { summary: summaryProps }) => {
       <CardContent>
         <p className="text-gray-600 text-sm mb-4">{summary.description}</p>
         <div className="flex justify-between items-center">
-          <span className="text-green-600 font-medium">{summary.status}</span>
+          <Badge className="bg-green-600 text-white">{summary.status}</Badge>
+          {/* <span className="text-green-600 font-medium">{summary.status}</span> */}
           <Dialog>
-            <DialogTrigger className="bg-gray-100 p-2 border rounded-md">
+            <DialogTrigger className="bg-gray-100 p-2 border rounded-md cursor-pointer">
               <Trash2 className="w-4 h-4 text-red-500" />
             </DialogTrigger>
             <DialogContent>
