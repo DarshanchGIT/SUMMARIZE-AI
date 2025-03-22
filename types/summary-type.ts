@@ -1,6 +1,8 @@
-export type summaryProps = {
-    title: string;
-    time: string;
-    status: string;
-    description: string;
-  };
+export type SummaryProps = {
+  id: string;
+  summaryText: string;
+  title: string | null;
+  status: string;
+  createdAt: Date;
+  userId: string;
+};

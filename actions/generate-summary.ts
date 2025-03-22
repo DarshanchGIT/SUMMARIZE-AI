@@ -1,9 +1,9 @@
 "use server";
 
+import { getUser } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { generateSummaryFromGemini } from "@/lib/gemini";
 import { extractTextUsingLangchain } from "@/lib/langchain";
-import { auth } from "@clerk/nextjs/server";
 
 export type ServerData = {
   userId: string;
@@ -29,6 +29,8 @@ type SummaryData = {
 export async function generateSummary(
   serverData: ServerData
 ): Promise<SummaryResponse> {
+  const authCheck = await getUser();
+  if (!authCheck.success) return authCheck;
   const {
     userId,
     file: { name, url },
@@ -67,13 +69,8 @@ export async function generateSummary(
 
 export async function storePdfSummary(summaryData: SummaryData) {
   //authorize user logged in or not
-  const { userId } = await auth();
-  if (!userId) {
-    return {
-      success: false,
-      message: "User not authenticated",
-    };
-  }
+  const authCheck = await getUser();
+  if (!authCheck.success) return authCheck;
   if (!summaryData) {
     return {
       success: false,
@@ -86,7 +83,7 @@ export async function storePdfSummary(summaryData: SummaryData) {
     //save pdf summary
     const response = await prisma.pdfSummary.create({
       data: {
-        userId: userId,
+        userId: authCheck.userId as string,
         summaryText: summaryText,
         title: title,
         originalFileUrl: originalFileUrl,
