@@ -141,3 +141,11 @@
 html {
   scroll-behavior: smooth;
 }
+#nprogress .bar {
+  background: linear-gradient(to right, #44bcff, #ff44ec, #ff675e);
+  height: 3px;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px #ff44ec, 0 0 5px #ff675e;
+}

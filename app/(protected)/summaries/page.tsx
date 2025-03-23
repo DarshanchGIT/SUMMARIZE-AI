@@ -1,13 +1,15 @@
 import { getSummaries } from "@/actions/summary-actions";
 import { SummariesPage } from "@/components/summaries/summary-dashboard";
+import { SummaryProvider } from "@/context/summary-context";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 export default async function Page() {
   const { userId } = await auth();
-  if (!userId) redirect("/");
+  if (!userId) redirect("/sign-in");
 
   const { summaries, success } = await getSummaries();
+  // console.log(summaries);
 
   if (!success) {
     return (
@@ -21,5 +23,9 @@ export default async function Page() {
       </div>
     );
   }
-  return <SummariesPage />;
+  return (
+    <SummaryProvider summaries={summaries}>
+      <SummariesPage />
+    </SummaryProvider>
+  );
 }
