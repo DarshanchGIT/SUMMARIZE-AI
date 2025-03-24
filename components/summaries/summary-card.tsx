@@ -7,7 +7,7 @@ import { formatDistanceToNow } from "date-fns";
 
 export const SummaryCard = ({ summary }: { summary: SummaryProps }) => {
   return (
-    <Card className="p-4 transition-transform duration-200 hover:scale-105 cursor-pointer h-56">
+    <Card className="p-4 transition-transform duration-200 cursor-pointer h-56 border-2">
       <CardHeader>
         <CardTitle>
           <div className="flex items-center gap-2">
@@ -23,14 +23,14 @@ export const SummaryCard = ({ summary }: { summary: SummaryProps }) => {
       </CardHeader>
 
       <CardContent className="flex flex-col justify-between h-full">
-        <p className="text-gray-600 text-sm mb-4 line-clamp-3 overflow-hidden">
+        <p className="text-gray-600 text-sm mb-4 line-clamp-3 ">
           {summary.summaryText}
         </p>
         <div className="flex justify-between items-center">
           <Badge className="bg-green-200 text-green-600">
             {summary.status}
           </Badge>
-          <SummaryDelete />
+          <SummaryDelete summaryId={summary.id} />
         </div>
       </CardContent>
     </Card>

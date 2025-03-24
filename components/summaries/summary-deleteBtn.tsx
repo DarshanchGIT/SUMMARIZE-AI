@@ -12,9 +12,32 @@ import {
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { useState } from "react";
+import { DeleteSummary } from "@/actions/summary-actions";
+import { toast } from "sonner";
+import { Spinner } from "../ui/spinner";
 
-export const SummaryDelete = () => {
+export const SummaryDelete = ({ summaryId }: { summaryId: string }) => {
+  //Learning🏫 receiving primitive props ({props} : {prop : type_of_prop})
   const [open, setOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleSummaryDeletion = async () => {
+    try {
+      setLoading(true);
+      const summaryDeletionToast = toast.loading("Deleting summary...");
+      await DeleteSummary(summaryId);
+      // await new Promise((r) => setTimeout(() => r("resolved"), 5000));
+      toast.success("Summary deleted successfully");
+      toast.dismiss(summaryDeletionToast);
+    } catch (error: any) {
+      console.error(error);
+      toast.error("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+      setOpen(false);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -27,7 +50,7 @@ export const SummaryDelete = () => {
           <DialogTitle>Delete Summary</DialogTitle>
           <DialogDescription>
             Are you sure you want to delete this summary? This action cannot be
-            undone
+            undone.
           </DialogDescription>
           <DialogFooter>
             <Button
@@ -35,11 +58,20 @@ export const SummaryDelete = () => {
               onClick={() => setOpen(false)}
             >
               <X />
-              cancel
+              Cancel
             </Button>
-            <Button className="m-2 cursor-pointer" variant={"destructive"}>
-              <Trash2 />
-              Delete
+            <Button
+              className="m-2 cursor-pointer w-24 flex items-center justify-center"
+              variant="destructive"
+              onClick={handleSummaryDeletion}
+            >
+              {loading ? (
+                <Spinner fillColor="fill-white" />
+              ) : (
+                <span className="flex items-center gap-1">
+                  Delete <Trash2 />
+                </span>
+              )}
             </Button>
           </DialogFooter>
         </DialogHeader>
