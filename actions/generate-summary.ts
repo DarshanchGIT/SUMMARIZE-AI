@@ -70,11 +70,12 @@ export async function generateSummary(
 export async function storePdfSummary(summaryData: SummaryData) {
   //authorize user logged in or not
   const authCheck = await getUser();
-  if (!authCheck.success) return authCheck;
+  if (!authCheck.success) return { authCheck, response: "" };
   if (!summaryData) {
     return {
       success: false,
       message: "Insufficient information to populate DB",
+      response: "",
     };
   }
   const { fileName, originalFileUrl, summaryText, title } = summaryData;
@@ -101,6 +102,7 @@ export async function storePdfSummary(summaryData: SummaryData) {
       success: false,
       message:
         error instanceof Error ? error.message : "Error saving pdf summary",
+      response: "",
     };
   }
 }

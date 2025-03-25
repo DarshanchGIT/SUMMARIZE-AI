@@ -32,6 +32,9 @@ export async function getSummaries(): Promise<SummaryFetchResponse> {
         status: true,
         createdAt: true,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     return {

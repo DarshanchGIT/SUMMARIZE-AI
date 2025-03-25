@@ -68,9 +68,9 @@ export const SummaryDelete = ({ summaryId }: { summaryId: string }) => {
               {loading ? (
                 <Spinner fillColor="fill-white" />
               ) : (
-                <span className="flex items-center gap-1">
-                  Delete <Trash2 />
-                </span>
+                <>
+                  <Trash2 /> Delete
+                </>
               )}
             </Button>
           </DialogFooter>

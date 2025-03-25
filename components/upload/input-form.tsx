@@ -11,102 +11,151 @@ import { toast } from "sonner";
 import { Spinner } from "../ui/spinner";
 import { generateSummary, storePdfSummary } from "@/actions/generate-summary";
 import { formatFileNameToTitle } from "@/utils/format-filName";
+import { useRouter } from "next/navigation";
 
 export const UploadDiv = () => {
-    const [fileName, setFileName] = useState("");
-    const [loading, setLoading] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-    const { startUpload } = useUploadThing("pdfUploader");
+  const { startUpload } = useUploadThing("pdfUploader");
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) setFileName(file.name);
-    };
+  // Handling file selection
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+    }
+  };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setLoading(true);
+  // Handling form submission
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-        const formData = new FormData(e.currentTarget);
-        const file = formData.get("file") as File;
+    if (!file) {
+      toast.warning("Please upload a file first");
+      return;
+    }
 
-        const { success } = fileSchema.safeParse({ file });
-        if (!success) {
-            toast.error("Invalid file. Please upload a valid PDF.");
-            setLoading(false);
-            return;
-        }
+    setLoading(true);
 
-        const pdfUploading = toast.loading("Uploading your PDF...🙃");
-        try {
-            const uploadResponse = await startUpload([file]);
-            toast.dismiss(pdfUploading);
+    // Validating file format
+    const { success } = fileSchema.safeParse({ file });
+    if (!success) {
+      toast.error("Invalid file. Please upload a valid PDF.");
+      setLoading(false);
+      return;
+    }
 
-            if (!uploadResponse?.length) {
-                toast.error("Upload failed. Please try again.");
-                return;
-            }
+    const pdfUploading = toast.loading("Uploading your PDF...🙃");
+    try {
+      // Uploading file
+      const uploadResponse = await startUpload([file]);
+      toast.dismiss(pdfUploading);
 
-            const serverData = uploadResponse[0].serverData;
-            if (!serverData) {
-                toast.error("Server response is invalid.");
-                return;
-            }
+      if (!uploadResponse?.length) {
+        toast.error("Upload failed. Please try again.");
+        return;
+      }
 
-            const summaryGenerateToast = toast.loading("Generating summary...🙂");
-            const response = await generateSummary(serverData);
-            toast.dismiss(summaryGenerateToast);
+      const serverData = uploadResponse[0].serverData;
+      if (!serverData) {
+        toast.error("Server response is invalid.");
+        return;
+      }
 
-            if (!response.success) {
-                toast.error(response.message || "Failed to generate summary.");
-                return;
-            }
+      // Generating summary
+      const summaryGenerateToast = toast.loading("Generating summary...🙂");
+      const res = await generateSummary(serverData);
+      toast.dismiss(summaryGenerateToast);
 
-            const { file: { name, url } } = serverData;
-            const title = formatFileNameToTitle(name)
-            await storePdfSummary({
-                title: title,
-                summaryText: response.summary || '',
-                fileName: name,
-                originalFileUrl: url,
-            });
+      if (!res.success) {
+        toast.error(res.message || "Failed to generate summary.");
+        return;
+      }
 
-            toast.success("Summary generated successfully✨");
-        } catch (error) {
-            toast.dismiss(pdfUploading);
-            toast.error("An error occurred. Please try again.");
-            console.error("Error:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+      // Storing summary
+      const {
+        file: { name, url },
+      } = serverData;
+      const title = formatFileNameToTitle(name);
+      const storeResponse = await storePdfSummary({
+        title: title,
+        summaryText: res.summary || "",
+        fileName: name,
+        originalFileUrl: url,
+      });
 
-    return (
-        <div className="flex justify-center items-center h-[50vh] p-6">
-            <div className="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-8 space-y-6">
-                <TypewriterEffect
-                    words={[{ text: "Start" }, { text: "Uploading" }, { text: "your" }, { text: "PDFs" }]}
-                    className="text-center text-3xl font-bold"
-                />
-                <p className="text-center text-sm text-gray-600">
-                    Upload your PDF and let our AI do the magic ✨
-                </p>
-                <form className="flex flex-col sm:flex-row gap-4 items-center w-full" onSubmit={handleSubmit}>
-                    <label className="w-full sm:max-w-md">
-                        <Input id="file" type="file" name="file" className="hidden" onChange={handleFileChange} />
-                        <div className="w-full text-center border border-gray-300 bg-white text-gray-700 px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-100">
-                            {fileName || "Choose File"}
-                        </div>
-                    </label>
-                    <Button
-                        type="submit"
-                        className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg cursor-pointer min-w-[120px]"
-                        disabled={loading}
-                    >
-                        {loading ? <Spinner /> : <><span>Upload</span><Upload size={18} /></>}
-                    </Button>
-                </form>
+      // Ensuring response is an object & not null
+      if (
+        typeof storeResponse.response === "object" &&
+        storeResponse.response !== null
+      ) {
+        const { id } = storeResponse.response;
+        console.log("Summary ID ->", id);
+        //push the router to /summary/${id}
+        router.push(`/summaries/${id}`);
+      } else {
+        console.error("Invalid response format:", storeResponse.response);
+      }
+
+      toast.success("Summary generated successfully✨");
+    } catch (error) {
+      toast.dismiss(pdfUploading);
+      toast.error("An error occurred. Please try again.");
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex justify-center items-center h-[50vh] p-6">
+      <div className="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-8 space-y-6">
+        <TypewriterEffect
+          words={[
+            { text: "Start" },
+            { text: "Uploading" },
+            { text: "your" },
+            { text: "PDFs" },
+          ]}
+          className="text-center text-3xl font-bold"
+        />
+        <p className="text-center text-sm text-gray-600">
+          Upload your PDF and let our AI do the magic ✨
+        </p>
+        <form
+          className="flex flex-col sm:flex-row gap-4 items-center w-full"
+          onSubmit={handleSubmit}
+        >
+          <label className="w-full sm:max-w-md">
+            <Input
+              id="file"
+              type="file"
+              name="file"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+            <div className="w-full text-center border border-gray-300 bg-white text-gray-700 px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-100">
+              {file ? file.name : "Choose File"}
             </div>
-        </div>
-    );
+          </label>
+          <Button
+            type="submit"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg cursor-pointer min-w-[120px]"
+            disabled={loading}
+          >
+            {loading ? (
+              <Spinner />
+            ) : (
+              <>
+                <span>Upload</span>
+                <Upload size={18} />
+              </>
+            )}
+          </Button>
+        </form>
+      </div>
+    </div>
+  );
 };
