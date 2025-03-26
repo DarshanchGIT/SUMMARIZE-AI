@@ -5,7 +5,7 @@ import prisma from "@/lib/db";
 import { SummaryProps } from "@/types/summary-type";
 import { revalidatePath } from "next/cache";
 
-type SummaryFetchResponse = {
+type SummariesFetchResponse = {
   success: boolean;
   message: string;
   summaries: SummaryProps[] | [];
@@ -13,9 +13,15 @@ type SummaryFetchResponse = {
 
 type SummaryDeleteResponse = { success: boolean; message: string };
 
+type SummaryFetchResponse = {
+  success: boolean;
+  message: string;
+  summary: SummaryProps | null;
+};
+
 //LEARNING🏫 -  typeScript expects both success and failure responses to match the return type structure. Since the failure response was missing summaries, it was causing type mismatches.
 
-export async function getSummaries(): Promise<SummaryFetchResponse> {
+export async function getSummaries(): Promise<SummariesFetchResponse> {
   const authCheck = await getUser();
   if (!authCheck.success) {
     return { success: false, message: "User not authenticated", summaries: [] };
@@ -49,6 +55,47 @@ export async function getSummaries(): Promise<SummaryFetchResponse> {
       message:
         error instanceof Error ? error.message : "Error fetching summaries",
       summaries: [],
+    };
+  }
+}
+
+export async function getSummaryById(
+  summaryId: string
+): Promise<SummaryFetchResponse> {
+  const authCheck = await getUser();
+  if (!authCheck.success) {
+    return { success: false, message: "User not authenticated", summary: null };
+  }
+
+  try {
+    const summary = await prisma.pdfSummary.findFirst({
+      where: {
+        id: summaryId,
+        userId: authCheck.userId as string,
+      },
+      select: {
+        id: true,
+        summaryText: true,
+        userId: true,
+
+        title: true,
+        status: true,
+        createdAt: true,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Summary fetched successfully",
+      summary: summary ?? null,
+    };
+  } catch (error: any) {
+    console.error("Error fetching summary:", error);
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "Error fetching summary",
+      summary: null,
     };
   }
 }

@@ -4,10 +4,14 @@ import { Badge } from "../ui/badge";
 import { SummaryDelete } from "./summary-deleteBtn";
 import { FileText } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { redirect } from "next/navigation";
 
 export const SummaryCard = ({ summary }: { summary: SummaryProps }) => {
   return (
-    <Card className="p-4 transition-transform duration-200 cursor-pointer h-56 border-2">
+    <Card
+      className="p-4 transition-transform duration-200 cursor-pointer h-56 border-2"
+      onClick={() => redirect(`/summaries/${summary.id}`)}
+    >
       <CardHeader>
         <CardTitle>
           <div className="flex items-center gap-2">
