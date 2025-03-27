@@ -10,7 +10,6 @@ import {
   Clock,
   FileText,
   Sparkles,
-  WholeWord,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -21,6 +20,10 @@ const summaries = [
     words: 198,
     date: "15-11-2003",
     content: [
+      "Master Next.js and build amazing web apps with this comprehensive course.",
+      "Perfect for developers of all levels.",
+      "Master Next.js and build amazing web apps with this comprehensive course.",
+      "Perfect for developers of all levels.",
       "Master Next.js and build amazing web apps with this comprehensive course.",
       "Perfect for developers of all levels.",
     ],
