@@ -26,8 +26,6 @@ export default async function IndividualSummaryPage({
       </div>
     );
   }
-
-  const { summaryText, title, status, createdAt } = response.summary;
-
-  return <IndividualSummaryComp />;
+  console.log("Summary as string: ", response.summary);
+  return <IndividualSummaryComp summary={response.summary} />;
 }
