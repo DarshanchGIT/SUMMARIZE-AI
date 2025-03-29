@@ -77,7 +77,7 @@ export const IndividualSummaryComp = ({
       </div>
 
       {/* Summary Card (Fixed Height) */}
-      <Card className="shadow-lg rounded-2xl p-6 relative bg-white min-h-[400px] flex flex-col">
+      <Card className="shadow-lg rounded-2xl p-6 relative bg-white min-h-scren flex flex-col">
         <CardHeader className="flex flex-col items-start">
           {/* Title (Left-Aligned) */}
           <div className="w-full text-left">
@@ -102,38 +102,44 @@ export const IndividualSummaryComp = ({
         </CardHeader>
 
         {/* Content (Scrollable if needed) */}
-        <CardContent className="flex-grow overflow-y-auto">
-          <Card className="shadow-md rounded-xl p-4">
+        <CardContent className="flex-grow overflow-hidden">
+          <Card className="shadow-md rounded-xl p-4 h-[300px] overflow-y-auto">
             <CardHeader>
               <div className="text-2xl font-bold">
                 {summaryContent[currentIndex].title}
               </div>
             </CardHeader>
-            <CardContent>
-              <p className="text-gray-800">
-                {summaryContent[currentIndex].description}
-              </p>
+            <CardContent className="flex flex-col gap-3 max-h-[250px] overflow-y-auto">
+              {summaryContent[currentIndex].description.map((desc, index) => (
+                <div
+                  key={index}
+                  className="bg-gray-200 font-normal italic p-3 rounded-xl text-black"
+                >
+                  {desc}
+                </div>
+              ))}
             </CardContent>
           </Card>
-        </CardContent>
 
-        {/* Navigation Buttons (Inside Card as CardFooter) */}
-        <CardFooter className="flex justify-between items-center p-4 border-t">
-          <button
-            onClick={prevSlide}
-            className="bg-red-500 p-3 rounded-full shadow-md disabled:opacity-50 cursor-pointer"
-            disabled={currentIndex === 0}
-          >
-            <ChevronLeft className="text-white" />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="bg-red-500 p-3 rounded-full shadow-md disabled:opacity-50 cursor-pointer"
-            disabled={currentIndex === summaryContent.length - 1}
-          >
-            <ChevronRight className="text-white" />
-          </button>
-        </CardFooter>
+          {/* Navigation Buttons */}
+
+          <div className="flex justify-between items-center pb-0 pt-4">
+            <button
+              onClick={prevSlide}
+              className="bg-red-500 p-3 rounded-full shadow-md disabled:opacity-50 cursor-pointer"
+              disabled={currentIndex === 0}
+            >
+              <ChevronLeft className="text-white" />
+            </button>
+            <button
+              onClick={nextSlide}
+              className="bg-red-500 p-3 rounded-full shadow-md disabled:opacity-50 cursor-pointer"
+              disabled={currentIndex === summaryContent.length - 1}
+            >
+              <ChevronRight className="text-white" />
+            </button>
+          </div>
+        </CardContent>
       </Card>
     </div>
   );

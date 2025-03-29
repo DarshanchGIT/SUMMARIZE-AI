@@ -1,16 +1,20 @@
 export const summaryUtility = (summaryText: string) => ({
-  // Parses the summary text into structured sections
   parseSummaryText: () => {
-    // Split sections using `#` but keep the delimiter for extracting titles
+    // Split sections using `# ` but keep the delimiter for extracting titles
     const sections = summaryText.split(/\n# /).map((s) => s.trim());
 
     return sections.map((section) => {
       // Extract title (first line)
       const [title, ...contentLines] = section.split("\n");
+      const description = contentLines.join("\n").trim();
+
+      // Regex to split descriptions at emoji-based points
+      const points =
+        description.match(/(\s*[🎯📌📃👥🚀⭐💫💡💪🔥💎✨📚🔎].+)/gu) || [];
 
       return {
-        title: title.trim(), // Remove extra spaces
-        description: contentLines.join("\n").trim(), // Join rest as description
+        title: title.trim(),
+        description: points.map((point) => point.trim()), // Store as array of split points
       };
     });
   },

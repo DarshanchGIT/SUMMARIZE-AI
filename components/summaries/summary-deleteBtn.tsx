@@ -26,7 +26,7 @@ export const SummaryDelete = ({ summaryId }: { summaryId: string }) => {
       setLoading(true);
       const summaryDeletionToast = toast.loading("Deleting summary...");
       await DeleteSummary(summaryId);
-      // await new Promise((r) => setTimeout(() => r("resolved"), 5000));
+      //await new Promise((r) => setTimeout(() => r("resolved"), 5000));
       toast.success("Summary deleted successfully");
       toast.dismiss(summaryDeletionToast);
     } catch (error: any) {
@@ -61,12 +61,14 @@ export const SummaryDelete = ({ summaryId }: { summaryId: string }) => {
               Cancel
             </Button>
             <Button
-              className="m-2 cursor-pointer w-24 flex items-center justify-center"
+              className="m-2 cursor-pointer min-w-[110px] flex items-center justify-center"
               variant="destructive"
               onClick={handleSummaryDeletion}
             >
               {loading ? (
-                <Spinner fillColor="fill-white" />
+                <>
+                  <Spinner fillColor="fill-white" /> Deleting ...
+                </>
               ) : (
                 <>
                   <Trash2 /> Delete

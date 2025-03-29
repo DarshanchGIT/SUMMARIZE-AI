@@ -12,12 +12,15 @@ import { Spinner } from "../ui/spinner";
 import { generateSummary, storePdfSummary } from "@/actions/generate-summary";
 import { formatFileNameToTitle } from "@/utils/format-filName";
 import { useRouter } from "next/navigation";
+import { RateLimit } from "@/lib/rateLimiter";
+import { useAuth } from "@clerk/nextjs";
 
 export const UploadDiv = () => {
+  const { userId } = useAuth();
+
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
   const { startUpload } = useUploadThing("pdfUploader");
 
   // Handling file selection
@@ -47,9 +50,23 @@ export const UploadDiv = () => {
       return;
     }
 
+    // Rate Limiting - @upstash/redis
+
+    if (!userId) {
+      toast.error("User is not authenticated");
+      setLoading(false);
+      return;
+    }
+    const canUpload: boolean = await RateLimit(userId);
+    if (!canUpload) {
+      toast.error("Upload limit exceeded. Please try again later.");
+      setLoading(false);
+      return;
+    }
+
+    // Uploading file
     const pdfUploading = toast.loading("Uploading your PDF...🙃");
     try {
-      // Uploading file
       const uploadResponse = await startUpload([file]);
       toast.dismiss(pdfUploading);
 
@@ -86,14 +103,11 @@ export const UploadDiv = () => {
         originalFileUrl: url,
       });
 
-      // Ensuring response is an object & not null
       if (
-        typeof storeResponse.response === "object" &&
-        storeResponse.response !== null
+        storeResponse.response &&
+        typeof storeResponse.response === "object"
       ) {
         const { id } = storeResponse.response;
-        console.log("Summary ID ->", id);
-        //push the router to /summary/${id}
         router.push(`/summaries/${id}`);
       } else {
         console.error("Invalid response format:", storeResponse.response);
