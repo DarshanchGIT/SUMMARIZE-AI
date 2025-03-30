@@ -6,8 +6,8 @@ const redis = new Redis({
   token: upstashToken!,
 });
 
-const LIMIT = 5;
-const WINDOW_SECONDS = 60;
+const LIMIT = 3;
+const WINDOW_SECONDS = 70;
 
 export const RateLimit = async (userId: string) => {
   const key = `rate_limit:${userId}`;

@@ -15,16 +15,16 @@ export async function Header() {
         <nav className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 transform md:flex">
           <ul className="flex items-center justify-center gap-8">
             <li className="text-sm hover:text-foreground/80">
-              <Link href="/features">Features</Link>
+              <Link href="/features">About us</Link>
             </li>
             <li className="text-sm hover:text-foreground/80">
-              <Link href="/about">About Us</Link>
+              <Link href="/about">How it works</Link>
             </li>
             <li className="text-sm hover:text-foreground/80">
               <Link href="/pricing">Pricing</Link>
             </li>
             <li className="text-sm hover:text-foreground/80">
-              <Link href="/blog">Blog</Link>
+              <Link href="/blog">Testimonials</Link>
             </li>
           </ul>
         </nav>

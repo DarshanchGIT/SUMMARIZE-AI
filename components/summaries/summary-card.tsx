@@ -6,25 +6,30 @@ import { FileText, ChevronRight } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { redirect } from "next/navigation";
 import { Button } from "../ui/button";
+import { formatSummmaryTitle } from "@/utils/format-long-summary-title";
 
 export const SummaryCard = ({ summary }: { summary: SummaryProps }) => {
+  const formattedTitle = formatSummmaryTitle(summary.title || "");
   return (
     <Card className="p-4 transition-transform duration-200 cursor-pointer h-56 border-2 flex flex-col hover:shadow-md">
       <CardHeader className="p-0">
         <div className="flex items-start justify-between gap-2">
           {/* Left Section - Icon & Title with proper truncation */}
-          <div className="flex items-center gap-2 min-w-0 flex-1">
+          <div className="flex items-center gap-2 overflow-hidden max-w-[calc(100%-70px)]">
             <FileText size={24} className="text-red-400 shrink-0" />
-            <CardTitle className="truncate text-base font-semibold">
-              {summary.title}
+            <CardTitle
+              className="truncate text-base font-semibold"
+              title={summary.title || ""} // Show full title on hover
+            >
+              {formattedTitle}
             </CardTitle>
           </div>
 
-          {/* Right Section - View Button with fixed sizing */}
+          {/* Right Section - View Button with fixed positioning */}
           <Button
             variant="ghost"
             size="sm"
-            className="shrink-0 text-red-500 hover:text-red-600 hover:bg-transparent hover:underline hover:decoration-red-400 p-0 h-auto cursor-pointer"
+            className="shrink-0 text-red-500 hover:text-red-600 hover:bg-transparent hover:underline hover:decoration-red-400 p-0 h-auto cursor-pointer ml-auto"
             onClick={() => redirect(`/summaries/${summary.id}`)}
           >
             View <ChevronRight size={16} />
