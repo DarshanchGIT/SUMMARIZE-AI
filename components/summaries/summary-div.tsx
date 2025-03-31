@@ -2,10 +2,11 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import BlurText from "../ui/blur-text";
 import { SummaryCard } from "./summary-card";
-import { ArrowRight, Plus, ShieldAlert} from "lucide-react";
+import { ArrowRight, Plus, ShieldAlert } from "lucide-react";
 import { useSummary } from "@/context/summary-context";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { Container } from "../global/container";
 
 export const SummaryDiv = () => {
   const { summaries } = useSummary();
@@ -24,7 +25,6 @@ export const SummaryDiv = () => {
             Transform your PDFs into concise, actionable insights
           </p>
         </div>
-
         <Link href="/upload">
           <Button className="flex items-center justify-center gap-3 bg-gradient-to-r from-red-600 to-red-700 text-white w-56 sm:w-52 py-4 text-base sm:text-md shadow-[0px_4px_15px_rgba(220,38,38,0.4)] hover:shadow-red-500/60 hover:scale-105 transition-all cursor-pointer">
             <Plus size={22} />
@@ -34,17 +34,17 @@ export const SummaryDiv = () => {
       </div>
 
       {/* Upgrade Alert */}
-      <Alert className="bg-red-100 border border-red-300 mt-6 mb-6">
-        <AlertDescription className="text-red-600 inline-flex items-center">
-          <ShieldAlert size={20} className="mr-2" />
-          You've reached the limit of 5 uploads on the Basic plan.
-          <a href="#" className="text-red-600 underline mx-1">
-            Click here to Upgrade Pro
-          </a>
-          <ArrowRight size={16} />
-          for unlimited uploads.
-        </AlertDescription>
-      </Alert>
+        <Alert className="bg-red-100 border border-red-300 mt-6 mb-6">
+          <AlertDescription className="text-red-600 inline-flex items-center">
+            <ShieldAlert size={20} className="mr-2" />
+            You've reached the limit of 5 uploads on the Basic plan.
+            <a href="#" className="text-red-600 underline mx-1">
+              Click here to Upgrade Pro
+            </a>
+            <ArrowRight size={16} />
+            for unlimited uploads.
+          </AlertDescription>
+        </Alert>
 
       {/* Summary List */}
       <ScrollArea className="min-h-[200px]">

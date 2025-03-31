@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Source_Sans_3 as FontSans } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import { Loader } from "@/components/common/Loader";
+import "./globals.css";
 
-const fontSans = FontSans({
-  variable: "--font-sans",
+const poppins = Poppins({
+  weight: ["400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
-  display: "swap",
+  variable: "--font-poppins",
 });
 
 export const metadata: Metadata = {
@@ -26,12 +26,13 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body
-          className={`${fontSans.variable} font-sans antialiased`}
-          style={{ fontFamily: "var(--font-sans), sans-serif" }}
+          className={`${poppins.variable} font-sans antialiased`}
+          style={{ fontFamily: "var(--font-poppins), sans-serif" }}
         >
-          <Loader />
-          {children}
-          <Toaster richColors />
+          
+            <Loader />
+            {children}
+            <Toaster richColors />
         </body>
       </html>
     </ClerkProvider>

@@ -149,3 +149,18 @@ html {
 #nprogress .peg {
   box-shadow: 0 0 10px #ff44ec, 0 0 5px #ff675e;
 }
+/* Adjust global font settings */
+body {
+  line-height: 1.5; /* Adjust for better spacing */
+  letter-spacing: 0.02em; /* Reduce text wrapping */
+  word-spacing: 0.02em; /* Prevent unnecessary wrapping */
+}
+@theme inline {
+  --animate-scroll: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite;
+ 
+  @keyframes scroll {
+    to {
+      transform: translate(calc(-50% - 0.5rem));
+    }
+  }
+}
