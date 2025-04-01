@@ -20,11 +20,12 @@ export async function Header() {
             <li className="text-sm hover:text-foreground/80">
               <Link href="#howitworks">How it works</Link>
             </li>
-            <li className="text-sm hover:text-foreground/80">
-              <Link href="#pricing">Pricing</Link>
-            </li>
+
             <li className="text-sm hover:text-foreground/80">
               <Link href="#testimonials">Testimonials</Link>
+            </li>
+            <li className="text-sm hover:text-foreground/80">
+              <Link href="#pricing">Pricing</Link>
             </li>
           </ul>
         </nav>
@@ -42,7 +43,7 @@ export async function Header() {
             </Link>
           </SignedOut>
           <SignedIn>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-5">
               <Link
                 className="text-sm hover:text-foreground/80"
                 href="/summaries"

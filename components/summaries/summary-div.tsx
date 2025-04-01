@@ -2,15 +2,14 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import BlurText from "../ui/blur-text";
 import { SummaryCard } from "./summary-card";
-import { ArrowRight, Plus, ShieldAlert } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Plus, ShieldAlert } from "lucide-react";
 import { useSummary } from "@/context/summary-context";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { Container } from "../global/container";
 
 export const SummaryDiv = () => {
   const { summaries } = useSummary();
-  console.log(summaries);
+  // console.log(summaries);
 
   return (
     <div className="max-w-6xl mx-auto py-10 px-4">
@@ -34,17 +33,31 @@ export const SummaryDiv = () => {
       </div>
 
       {/* Upgrade Alert */}
+      {summaries.length > 4 ? (
         <Alert className="bg-red-100 border border-red-300 mt-6 mb-6">
           <AlertDescription className="text-red-600 inline-flex items-center">
             <ShieldAlert size={20} className="mr-2" />
-            You've reached the limit of 5 uploads on the Basic plan.
+            You’ve reached the upload limit of 5 files on the Basic plan.
             <a href="#" className="text-red-600 underline mx-1">
-              Click here to Upgrade Pro
+              Upgrade to Pro
             </a>
-            <ArrowRight size={16} />
-            for unlimited uploads.
+            <ArrowRight size={16} className="mx-1" />
+            for unlimited uploads. (Feature in development...)
           </AlertDescription>
         </Alert>
+      ) : (
+        <Alert className="bg-green-100 border border-green-300 mt-6 mb-6">
+          <AlertDescription className="text-green-600 inline-flex items-center">
+            <ShieldAlert size={20} className="mr-2" />
+            You have {5 - summaries.length} free uploads remaining.
+            <a href="#" className="text-green-700 underline mx-1">
+              Upgrade to Pro
+            </a>
+            <ArrowRight size={16} />
+            for unlimited uploads. (Feature in development...)
+          </AlertDescription>
+        </Alert>
+      )}
 
       {/* Summary List */}
       <ScrollArea className="min-h-[200px]">
@@ -54,9 +67,17 @@ export const SummaryDiv = () => {
               <SummaryCard key={index} summary={summary} />
             ))
           ) : (
-            <p className="text-gray-500 text-center col-span-full">
+            <div className="text-gray-500 text-center col-span-full py-18 border rounded-lg flex items-center text-md justify-center gap-2">
               No summaries available yet.
-            </p>
+              <Link
+                href="/upload"
+                className="underline flex justify-content items-center"
+              >
+                {" "}
+                Click here to create one
+                <ArrowUpRight className="mx-auto underline" />
+              </Link>
+            </div>
           )}
         </div>
       </ScrollArea>

@@ -125,7 +125,7 @@ export const UploadDiv = () => {
 
   return (
     <div className="flex justify-center items-center h-[50vh] p-6">
-      <div className="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-8 space-y-6">
+      <div className="w-full max-w-4xl bg-white rounded-2xl p-16 space-y-6 shadow-[0px_4px_15px_rgba(220,38,38,0.4)]">
         <TypewriterEffect
           words={[
             { text: "Start" },
@@ -139,7 +139,7 @@ export const UploadDiv = () => {
           Upload your PDF and let our AI do the magic ✨
         </p>
         <form
-          className="flex flex-col sm:flex-row gap-4 items-center w-full"
+          className="flex flex-col sm:flex-row gap-4 items-center justify-center w-full"
           onSubmit={handleSubmit}
         >
           <label className="w-full sm:max-w-md">
@@ -156,7 +156,7 @@ export const UploadDiv = () => {
           </label>
           <Button
             type="submit"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg cursor-pointer min-w-[120px]"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-7 py-5 rounded-lg cursor-pointer min-w-[120px]"
             disabled={loading}
           >
             {loading ? (
