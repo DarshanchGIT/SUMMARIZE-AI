@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { getSummaryById } from "@/actions/summary-actions";
 import { IndividualSummaryComp } from "@/components/summaries/summaryId/summaryId";
 import { auth } from "@clerk/nextjs/server";
