@@ -17,7 +17,7 @@ export default async function Page() {
         <div className="p-6 rounded-lg bg-red-100 text-red-700 border border-red-300 shadow-md">
           <h2 className="text-lg font-semibold">Oops! Something went wrong.</h2>
           <p className="mt-2">
-            We couldn't load the summaries. Please try again later.
+            We couldn &apos;t load the summaries. Please try again later.
           </p>
         </div>
       </div>
