@@ -35,7 +35,7 @@ export const generateSummaryFromGemini = async (pdfText: string) => {
     const res = await model.generateContent(prompt);
     const result = res.response.text();
     return result;
-  } catch (error: any) {
+  } catch (error) {
     console.error("Gemini API error");
     throw error;
   }

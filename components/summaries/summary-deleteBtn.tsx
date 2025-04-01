@@ -29,7 +29,7 @@ export const SummaryDelete = ({ summaryId }: { summaryId: string }) => {
       //await new Promise((r) => setTimeout(() => r("resolved"), 5000));
       toast.success("Summary deleted successfully");
       toast.dismiss(summaryDeletionToast);
-    } catch (error: any) {
+    } catch (error) {
       console.error(error);
       toast.error("An error occurred. Please try again.");
     } finally {

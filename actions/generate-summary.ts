@@ -96,7 +96,7 @@ export async function storePdfSummary(summaryData: SummaryData) {
       message: "DB populated successfully",
       response,
     };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error saving pdf summary:", error);
     return {
       success: false,

@@ -48,7 +48,7 @@ export async function getSummaries(): Promise<SummariesFetchResponse> {
       message: "Summaries fetched successfully",
       summaries,
     };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error fetching summaries:", error);
     return {
       success: false,
@@ -89,7 +89,7 @@ export async function getSummaryById(
       message: "Summary fetched successfully",
       summary: summary ?? null,
     };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error fetching summary:", error);
     return {
       success: false,
@@ -127,7 +127,7 @@ export async function DeleteSummary(
       success: true,
       message: `Successfully deleted summary with ID ${summaryId}`,
     };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error deleting summary:", error);
     return {
       success: false,
