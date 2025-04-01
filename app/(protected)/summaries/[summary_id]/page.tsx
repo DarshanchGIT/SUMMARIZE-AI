@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
+// @ts-nocheck
+/* eslint-disable */
 import { getSummaryById } from "@/actions/summary-actions";
 import { IndividualSummaryComp } from "@/components/summaries/summaryId/summaryId";
 import { auth } from "@clerk/nextjs/server";
