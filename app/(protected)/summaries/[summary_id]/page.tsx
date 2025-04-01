@@ -1,18 +1,17 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-
 import { getSummaryById } from "@/actions/summary-actions";
 import { IndividualSummaryComp } from "@/components/summaries/summaryId/summaryId";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-type IndividualSummaryPage = {
-  params: { summary_id: string };
-};
+interface IndividualSummaryPageProps {
+  params: {
+    summary_id: string;
+  };
+}
 
-// Learning🏫 - basic template to get the params out of slug so simple
 export default async function IndividualSummaryPage({
   params,
-}: IndividualSummaryPage) {
+}: IndividualSummaryPageProps) {
   const { userId } = await auth();
   if (!userId) redirect("/sign-in");
 
@@ -28,6 +27,6 @@ export default async function IndividualSummaryPage({
       </div>
     );
   }
-  // console.log("Summary as string: ", response.summary);
+
   return <IndividualSummaryComp summary={response.summary} />;
 }
