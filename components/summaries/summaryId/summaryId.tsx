@@ -1,11 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useState } from "react";
 import {
   Calendar,
@@ -18,6 +14,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { SummaryProps } from "@/types/summary-type";
 import { summaryUtility } from "@/utils/format-summary-content";
+import Link from "next/link";
 
 export const IndividualSummaryComp = ({
   summary,
@@ -58,9 +55,14 @@ export const IndividualSummaryComp = ({
             <Clock color="red" /> 3 min read
           </Badge>
         </div>
-        <Button variant="outline" className="bg-red-100 rounded-full">
-          <ChevronLeft color="red" /> Back to Dashboard
-        </Button>
+        <Link href="/summaries">
+          <Button
+            variant="outline"
+            className="bg-red-100 rounded-full cursor-pointer"
+          >
+            <ChevronLeft color="red" /> Back to Dashboard
+          </Button>
+        </Link>
       </div>
 
       {/* Progress Bar */}
