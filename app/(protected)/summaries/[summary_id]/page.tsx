@@ -1,23 +1,18 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable */
-
 import { getSummaryById } from "@/actions/summary-actions";
 import { IndividualSummaryComp } from "@/components/summaries/summaryId/summaryId";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-type IndividualSummaryPage = {
-  params: { summary_id: string };
-};
-
 export default async function IndividualSummaryPage({
   params,
-}: IndividualSummaryPage) {
+}:
+  | { params: Promise<{ summary_id: string }> }
+  | { params: { summary_id: string } }) {
   const { userId } = await auth();
   if (!userId) redirect("/sign-in");
 
-  const { summary_id } = params;
+  const resolvedParams = await params;
+  const { summary_id } = resolvedParams;
 
   const response = await getSummaryById(summary_id);
   if (!response.summary) {
