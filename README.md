@@ -1,4 +1,4 @@
-AI PDF Summarizer (Work in Progress)
+Summarize (Work in Progress)
 An AI-powered PDF summarizer built with Next.js, utilizing:
 
 UploadThing for file storage
@@ -9,5 +9,8 @@ Stay tuned for updates! 🚀
 
 ## **Demo**
 Check out the demo video of summarize in action:
-https://github.com/user-attachments/assets/dcca099e-9949-4f7b-9810-c16fa5de8f6f
+
+
+https://github.com/user-attachments/assets/b83a1729-0385-41c3-806b-1e5511386e97
+
 
