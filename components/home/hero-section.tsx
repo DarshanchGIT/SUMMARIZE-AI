@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Sparkle } from "lucide-react";
 import Link from "next/link";
 import { BorderBeam } from "../ui/border-beam";
-import demoImg from "@/assets/demoImg.png";
+import demoImg2 from "@/assets/demoImg2.png";
 import Image from "next/image";
 import { Container } from "../global/container";
 
@@ -46,7 +46,7 @@ export const Hero = () => {
 
           <div className="relative rounded-xl bg-white shadow-xl ring ring-gray-300 p-4 lg:p-6">
             <Image
-              src={demoImg}
+              src={demoImg2}
               alt="Dashboard preview"
               width={1050}
               height={1050}
@@ -59,7 +59,7 @@ export const Hero = () => {
               delay={6}
               colorFrom="#ff6a00"
               colorTo="#9c40ff"
-              className="opacity-[0.9] z-[10]" 
+              className="opacity-[0.9] z-[10]"
             />
           </div>
         </div>
