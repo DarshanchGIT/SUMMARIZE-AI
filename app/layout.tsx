@@ -15,6 +15,9 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Summarize",
   description: "Summarize is an app for summarizing PDF Documents.",
+  icons: {
+    icon: "/summarize.svg",
+  },
 };
 
 export default function RootLayout({
@@ -29,10 +32,9 @@ export default function RootLayout({
           className={`${poppins.variable} font-sans antialiased`}
           style={{ fontFamily: "var(--font-poppins), sans-serif" }}
         >
-          
-            <Loader />
-            {children}
-            <Toaster richColors />
+          <Loader />
+          {children}
+          <Toaster richColors />
         </body>
       </html>
     </ClerkProvider>

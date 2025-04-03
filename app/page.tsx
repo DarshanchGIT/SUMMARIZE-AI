@@ -3,6 +3,7 @@ import { Hero } from "@/components/home/hero-section";
 import { HowItWorks } from "@/components/home/how-it-works";
 import { Pricing } from "@/components/home/pricing-section";
 import { Testimonials } from "@/components/home/testimonials";
+
 export default function Home() {
   return (
     <>
