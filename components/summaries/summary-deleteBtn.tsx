@@ -15,8 +15,16 @@ import { useState } from "react";
 import { DeleteSummary } from "@/actions/summary-actions";
 import { toast } from "sonner";
 import { Spinner } from "../ui/spinner";
+import { DeleteFileFromUploadThing } from "@/actions/upload-actions";
 
-export const SummaryDelete = ({ summaryId }: { summaryId: string }) => {
+type SummaryDeletionProp = {
+  summaryId: string;
+  uploadThingKey: string;
+};
+export const SummaryDelete = ({
+  summaryId,
+  uploadThingKey,
+}: SummaryDeletionProp) => {
   //Learning🏫 receiving primitive props ({props} : {prop : type_of_prop})
   const [open, setOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -27,6 +35,7 @@ export const SummaryDelete = ({ summaryId }: { summaryId: string }) => {
       const summaryDeletionToast = toast.loading("Deleting summary...");
       await DeleteSummary(summaryId);
       //await new Promise((r) => setTimeout(() => r("resolved"), 5000));
+      await DeleteFileFromUploadThing(uploadThingKey);
       toast.success("Summary deleted successfully");
       toast.dismiss(summaryDeletionToast);
     } catch (error) {

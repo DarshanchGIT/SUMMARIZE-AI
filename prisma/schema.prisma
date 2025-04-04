@@ -18,13 +18,14 @@ model User {
   updatedAt  DateTime @updatedAt
 
   // pdfSummaries PdfSummary[]
-  payments     Payment[]
+  payments Payment[]
 }
 
 model PdfSummary {
   id              String   @id @default(uuid())
   userId          String
   originalFileUrl String
+  uploadThingKey  String
   summaryText     String
   status          String   @default("completed")
   title           String?

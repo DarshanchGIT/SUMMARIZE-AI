@@ -37,6 +37,8 @@ export async function getSummaries(): Promise<SummariesFetchResponse> {
         title: true,
         status: true,
         createdAt: true,
+        originalFileUrl: true,
+        uploadThingKey: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -77,10 +79,11 @@ export async function getSummaryById(
         id: true,
         summaryText: true,
         userId: true,
-
         title: true,
         status: true,
+        originalFileUrl: true,
         createdAt: true,
+        uploadThingKey: true,
       },
     });
 

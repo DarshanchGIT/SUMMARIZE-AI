@@ -21,6 +21,7 @@ type SummaryResponse = {
 
 type SummaryData = {
   originalFileUrl: string;
+  uploadThingKey: string;
   summaryText: string;
   title?: string;
   fileName?: string;
@@ -78,7 +79,8 @@ export async function storePdfSummary(summaryData: SummaryData) {
       response: "",
     };
   }
-  const { fileName, originalFileUrl, summaryText, title } = summaryData;
+  const { fileName, originalFileUrl, summaryText, title, uploadThingKey } =
+    summaryData;
 
   try {
     //save pdf summary
@@ -88,6 +90,7 @@ export async function storePdfSummary(summaryData: SummaryData) {
         summaryText: summaryText,
         title: title,
         originalFileUrl: originalFileUrl,
+        uploadThingKey: uploadThingKey,
         fileName: fileName,
       },
     });

@@ -74,10 +74,9 @@ export const UploadDiv = () => {
         toast.error("Upload failed. Please try again.");
         return;
       }
-
-      const serverData = uploadResponse[0].serverData;
-      if (!serverData) {
-        toast.error("Server response is invalid.");
+      const { key, serverData } = uploadResponse[0];
+      if (!serverData || !key) {
+        toast.error("Server response and key is unavailable");
         return;
       }
 
@@ -101,6 +100,7 @@ export const UploadDiv = () => {
         summaryText: res.summary || "",
         fileName: name,
         originalFileUrl: url,
+        uploadThingKey: key,
       });
 
       if (
